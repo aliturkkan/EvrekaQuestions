@@ -17,6 +17,13 @@ http://127.0.0.1:8000/vehicleInfo/home_page/
 
   * psycopg2==2.7.7
   * django
+  * python==2.7
+  * postgresql==9.6
+  
+## SQL FILE
+
+https://github.com/aliturkkan/EvrekaQuestions/blob/master/Veritaban%C4%B1/evreka_db
+
   
 ## ER DIAGRAM
 The ER diagram of the database I use in the project is below.
