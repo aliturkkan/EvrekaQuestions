@@ -1,0 +1,84 @@
+body{
+    background-color: #efefef;
+    padding: 2% 2%;
+}
+
+/* ---- TOP PAGE CONTAINER ---- */
+
+#page_top_container .btn_add-route-info{
+    text-align: right;
+}
+
+#page_top_container .btn_add-route-info button{
+    background-color: #4cad60;
+    border: 1px #4cad60 solid;
+    border-radius: 30px;
+    cursor: pointer;
+    text-align: center;
+    padding: 1% 1%;
+    width: 8%;
+}
+
+#page_top_container .btn_add-route-info .fa-plus{
+    color: white;
+}
+
+#page_top_container .btn_add-route-info button:hover{
+    background-color: white;
+}
+
+#page_top_container .btn_add-route-info button:hover .fa-plus {
+    color: #4cad60;
+}
+
+#page_top_container .date-info .fa-map{
+    color: #494949;
+    margin-right: 4%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+#txt-date-picker{
+    width: 10%;
+    font-size: 15px;
+}
+
+#page_top_container .btn-search-date{
+    background-color: #494949;
+    padding: inherit;
+    width: 40px;
+}
+
+#page_top_container .btn-search-date i{
+    color: white;
+    padding: 0px 0px;
+}
+
+#txt-date-picker, .input-group-prepend, .btn-search-date{
+    height: 25px;
+}
+
+#lbl-routes, #create-report{
+    font-size: 15px;
+    margin: 0;
+}
+
+#report_table_container{
+    margin-top: 3%;
+}
+
+.modal-content{
+    padding: 2%;
+}
+
+#col_location_data .col-sm-6, #col_location_data .col-sm-4{
+    background-color: #cbcbcb;
+}
+
+#col_location_data .col-sm-4{
+    text-align: right;
+}
+
+#col_location_data .modal-dialog{
+    width: 50%;
+}

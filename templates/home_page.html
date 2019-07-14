@@ -1,0 +1,185 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+
+    <!-- Include CSS Files -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" >
+    <link href="{% static 'css/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/CSS-home_page.css' %}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <!-- Page Top Line -->
+    <div id="page_top_container">
+        <div class="row">
+
+            <!-- Date Picker Container -->
+            <div class="col-sm-4 date-info">
+                <!-- Date Picker Form -->
+                <form method="post">{% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-auto">
+                            <div class="input-group mb-2">
+                                <i class="fas fa-map"></i>
+                                <input type="text" class="form-control input-sm" id="txt-date-picker" name="date-picker"
+                                                   placeholder="mm.dd.yyyy">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="far fa-calendar-alt fa-xs"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-dark btn-search-date" onclick="post_date();">
+                                <i class="fas fa-arrow-right fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-4"></div>
+
+            <!-- Add Button -->
+            <div class="col-sm-4 btn_add-route-info">
+                <button>
+                    <i class="fas fa-plus fa-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <p id="lbl-routes">Routes</p>
+        <p id="create-report"><i class="fas fa-flag fa-xs"></i>&nbsp;Create Report</p>
+    </div>
+
+    <!-- Report table container -->
+    <div id="report_table_container">
+        <table id="report_table" class="table table-striped table-bordered">
+
+        </table>
+    </div>
+
+    <!-- Reports detail modal -->
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" id="col_location_data"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLongTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <h5>Change Vehicle</h5>
+                {% for each_vehicles in vehicles %}
+                    <div class="row">
+                        <div class="col-sm-1">
+
+                        </div>
+                        <div class="col-sm-6">
+                            <p>{{ each_vehicles.0 }}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="col-sm-1">
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Include JS Files -->
+    <script type="text/javascript" src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/dataTables.bootstrap4.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap-datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/all.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/JS-home_page.js" %}"></script>
+    <script>
+
+        $("#txt-date-picker").keyup(function(event) {
+            if (event.keyCode === 13) {
+                post_date();
+            }
+        });
+
+        function post_date() {
+            var selected_date = document.getElementById("txt-date-picker").value;
+            if (selected_date == ''){
+                alert("Tarih boş olamaz. Lütfen tarihi seçiniz!");
+                document.getElementById("txt-date-picker").style.borderColor = '#FF0000';
+            }else{
+                document.getElementById("txt-date-picker").style.borderColor = '#008000';
+                $.ajax({
+                    type: "POST",
+                    deferRender: true,
+                    data: {
+                        'selected_date': selected_date,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success : function(json) {
+                        var table = $('#report_table').dataTable({
+                            "bAutoWidth" : true,
+                            "data" : json['key_table_informations'],
+                            destroy: true,
+                            "columns" : [
+                                { title: "Name" },
+                                { title: "Vehicle" },
+                                { title: "Time" },
+                                { title: "Driver" },
+                                { title: "Performance" },
+                                { title: "Status" },
+                                {"defaultContent": "<button>Click!</button>"}
+                            ]
+                        });
+                        $('#report_table').DataTable().ajax.reload();
+
+                    },
+                    error : function(xhr) {
+                        alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        $(function() {
+        $.contextMenu({
+            selector: '#report_table td',
+            callback: function(key, options) {
+                if(key=='change'){
+                    var currow = $(this).closest('tr');
+                    var col1 = currow.find('td:eq(1)').text();
+                    var col2 = currow.find('td:eq(0)').text();
+                    var col3 = currow.find('td:eq(3)').text();
+                    var main_col = col1 + " - " + col2 + " - " + col3;
+
+                    document.getElementById("ModalLongTitle").innerText = main_col;
+                    $("#col_location_data").modal('show');
+                }
+            },
+            items: {
+                "change": {name: "Change", icon: "change"},
+                "sep1": "---------",
+                "swap": {name: "Swap", icon: "cut"},
+            }
+        });
+
+        $('#report_table td').on('click', function(e){
+            $("#col_location_data").modal('show');
+        })
+    });
+    </script>
+
+</body>
+</html>
