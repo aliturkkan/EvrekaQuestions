@@ -4,7 +4,7 @@ source bin/activate
 
 python manage.py runserver
 
-127.0.0.1:8000/vehicleInfo/homepage
+http://127.0.0.1:8000/vehicleInfo/home_page/
 
 
 #### requiremnts:
